@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History and Statistics</title>
+    <link href="/output.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100 text-gray-900">
+    <div class="max-w-4xl mx-auto p-4 bg-white shadow-md rounded">
+        <h1 class="text-xl font-semibold text-center mb-4">History and Statistics</h1>
+        <table class="min-w-full border-collapse">
+            <thead>
+                <tr>
+                    <th class="border p-2">Full URL</th>
+                    <th class="border p-2">Short URL</th>
+                    <th class="border p-2">QR Code</th>
+                    <th class="border p-2">Clicks</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% urls.forEach(url=> { %>
+                    <tr>
+                        <td class="border p-2"><a href="<%= url.fullUrl %>" class="text-blue-500">
+                                <%= url.fullUrl %>
+                            </a></td>
+                        <td class="border p-2"><a href="<%= url.shortUrl %>" class="text-blue-500">
+                                <%= url.shortUrl %>
+                            </a></td>
+                        <td class="border p-2"><img src="<%= url.qrcode %>" alt="QR Code" class="w-16 h-16 mx-auto">
+                        </td>
+                        <td class="border p-2">
+                            <%= url.clicks %>
+                        </td>
+                    </tr>
+                    <% }) %>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

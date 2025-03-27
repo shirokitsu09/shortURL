@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Short URL Result</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-100">
+
+    <div class="max-w-lg mx-auto p-8 bg-white shadow-md rounded-md mt-10">
+        <h1 class="text-2xl font-bold text-center mb-6">Your Short URL</h1>
+
+        <!-- Display the original URL and the shortened URL -->
+        <div class="mb-4">
+            <p class="font-medium text-lg">Full URL:</p>
+            <a href="<%= fullUrl %>" class="text-blue-500 break-words">
+                <%= fullUrl %>
+            </a>
+        </div>
+        <div class="mb-4">
+            <p class="font-medium text-lg">Short URL:</p>
+            <a href="<%= shortUrl %>" class="text-blue-500 break-words">
+                <%= shortUrl %>
+            </a>
+        </div>
+
+        <!-- Display the QR Code -->
+        <div class="mb-4 text-center">
+            <p class="font-medium text-lg">QR Code:</p>
+            <img src="<%= qrcodeUrl %>" alt="QR Code" class="w-32 h-32 mx-auto mt-2">
+        </div>
+
+        <!-- Buttons for copying and saving the QR code -->
+        <div class="flex justify-center gap-4">
+            <button class="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600">Copy</button>
+            <button class="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600">Save Image</button>
+        </div>
+
+        <!-- Button to shorten another URL -->
+        <div class="mt-4 text-center">
+            <a href="/" class="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600">Shorten another URL</a>
+        </div>
+    </div>
+
+</body>
+
+</html>

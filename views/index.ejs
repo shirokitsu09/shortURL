@@ -20,10 +20,63 @@
                 <input type="url" name="fullUrl" id="fullUrl" placeholder="Enter a URL to shorten"
                     class="w-full p-3 mt-2 border border-gray-300 rounded-md" required>
             </div>
-            <button type="submit" class="w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600">Create URL & QR
-                Code</button>
+
+            <!-- Checkbox Options for optional settings -->
+            <div class="space-y-3 mb-6">
+                <div class="flex items-center">
+                    <input type="checkbox" id="expirationCheckbox" class="mr-2" onclick="toggleField('expirationDateField')">
+                    <label for="expirationCheckbox" class="text-lg">Set Expiration Date</label>
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="passwordCheckbox" class="mr-2" onclick="toggleField('passwordField')">
+                    <label for="passwordCheckbox" class="text-lg">Set Password</label>
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="accessLimitCheckbox" class="mr-2" onclick="toggleField('accessLimitField')">
+                    <label for="accessLimitCheckbox" class="text-lg">Limit Access Count</label>
+                </div>
+            </div>
+
+            <!-- Hidden Fields that will show up when checked -->
+            <div id="expirationDateField" class="hidden mb-4">
+                <label for="expirationDate" class="block text-lg font-medium text-gray-700">Expiration Date (optional)</label>
+                <input type="date" name="expirationDate" id="expirationDate"
+                    class="w-full p-3 mt-2 border border-gray-300 rounded-md">
+            </div>
+
+            <div id="passwordField" class="hidden mb-4">
+                <label for="password" class="block text-lg font-medium text-gray-700">Set a Password (optional)</label>
+                <input type="password" name="password" id="password" placeholder="Enter a password (optional)"
+                    class="w-full p-3 mt-2 border border-gray-300 rounded-md">
+            </div>
+
+            <div id="accessLimitField" class="hidden mb-4">
+                <label for="accessLimit" class="block text-lg font-medium text-gray-700">Limit Access Count (optional)</label>
+                <input type="number" name="accessLimit" id="accessLimit" min="1" placeholder="Enter access limit"
+                    class="w-full p-3 mt-2 border border-gray-300 rounded-md">
+            </div>
+
+            <button type="submit" class="w-full bg-red-500 text-white p-3 rounded-md hover:bg-red-600">Create URL & QR Code</button>
         </form>
+
+        <!-- Link to History Page -->
+        <div class="mt-6 text-center">
+            <p class="text-gray-700 text-lg">Already have a QR Code? <a href="/history"
+                    class="text-blue-500 hover:underline">View your history</a></p>
+        </div>
     </div>
+
+    <script>
+        // Function to toggle visibility of each setting field
+        function toggleField(fieldId) {
+            const field = document.getElementById(fieldId);
+            if (field.classList.contains('hidden')) {
+                field.classList.remove('hidden');
+            } else {
+                field.classList.add('hidden');
+            }
+        }
+    </script>
 
 </body>
 

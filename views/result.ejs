@@ -9,19 +9,18 @@
     <script>
         // ฟังก์ชันคัดลอก URL
         function copyToClipboard() {
-            const copyText = document.getElementById("shortUrl");  // เอา shortUrl จาก ID
+            const copyText = document.getElementById("shortUrl");
             navigator.clipboard.writeText(copyText.textContent)  // คัดลอกข้อความไปยังคลิปบอร์ด
                 .then(() => {
                     // เปลี่ยนข้อความปุ่มเป็น "Copied!"
                     const copyButton = document.getElementById("copyButton");
-                    copyButton.textContent = "Copied!";  // เปลี่ยนปุ่มเป็น "Copied!"
-                    copyButton.classList.add("bg-green-500");  // เปลี่ยนสีของปุ่มให้เป็นสีเขียว
-
+                    copyButton.textContent = "Copied!";
+                    copyButton.classList.add("bg-green-500");
                     // ซ่อนข้อความ "Copied!" หลังจาก 2 วินาที
                     setTimeout(() => {
-                        copyButton.textContent = "Copy";  // เปลี่ยนกลับเป็น "Copy"
-                        copyButton.classList.remove("bg-green-500");  // คืนสีปุ่ม
-                    }, 2000);  // ซ่อนหลังจาก 2 วินาที
+                        copyButton.textContent = "Copy";
+                        copyButton.classList.remove("bg-green-500");
+                    }, 2000);
                 });
         }
     </script>
@@ -31,8 +30,6 @@
 
     <div class="max-w-lg mx-auto p-8 bg-white shadow-md rounded-md mt-10">
         <h1 class="text-2xl font-bold text-center mb-6">Your Short URL</h1>
-
-        <!-- Display the original URL and the shortened URL -->
         <div class="mb-4">
             <p class="font-medium text-lg">Full URL:</p>
             <a href="<%= fullUrl %>" class="text-blue-500 break-words">
@@ -45,11 +42,39 @@
                 <%= shortUrl %>/<%= shortCode %>
             </a>
         </div>
+        <!-- Optional Settings -->
+        <% if (expirationDate) { %>
+            <div class="flex items-center mb-4">
+                <p class="font-medium text-lg mr-2">Expiration Date:</p>
+                <p class="text-gray-700">
+                    <%= expirationDate %>
+                </p>
+            </div>
+        <% } %>
+    
+        <% if (password) { %>
+            <div class="flex items-center mb-4">
+                <p class="font-medium text-lg mr-2">Password:</p>
+                <p class="text-gray-700">
+                    <%= password %>
+                </p>
+            </div>
+        <% } %>
+    
+        <% if (accessLimit) { %>
+            <div class="flex items-center mb-4">
+                <p class="font-medium text-lg mr-2">Scan Limit:</p>
+                <p class="text-gray-700">
+                    <%= accessLimit %> scans
+                </p>
+            </div>
+        <% } %>
+
 
         <!-- Display the QR Code -->
         <div class="mb-4 text-center">
             <p class="font-medium text-lg">QR Code:</p>
-            <img src="<%= qrcodeUrl %>" alt="QR Code" class="w-32 h-32 mx-auto mt-2" id="qrcodeImage">
+            <img src="<%= qrcode %>" alt="QR Code" class="w-32 h-32 mx-auto mt-2" id="qrcodeImage">
         </div>
 
         <!-- Buttons for copying and saving the QR code -->
@@ -60,7 +85,7 @@
             </button>
 
             <!-- Save Image button -->
-            <a href="<%= qrcodeUrl %>" download="qrcode.png"
+            <a href="<%= qrcode %>" download="qrcode.png"
                 class="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600">
                 Save Image
             </a>
@@ -68,11 +93,12 @@
 
         <!-- Button to shorten another URL -->
         <div class="mt-4 text-center">
-            <a href="/" class="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600">Shorten another URL</a>
+            <a href="/" class="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600">Shorten
+                another URL</a>
         </div>
-        <!-- Link to History Page -->
     </div>
-    
+
+    <!-- Link to History Page -->
     <div class="mt-6 text-center">
         <p class="text-gray-700 text-lg">Already have a QR Code? <a href="/history"
                 class="text-blue-500 hover:underline">View your history</a></p>

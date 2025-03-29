@@ -26,6 +26,7 @@
     "@emotion/styled": "^11.14.0",
     "@mui/material": "^7.0.0",
     "body-parser": "^2.2.0",
+    "dayjs": "^1.11.13",
     "nodemon": "^3.1.9",
     "path": "^0.12.7"
   }

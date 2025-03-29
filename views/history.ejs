@@ -22,7 +22,7 @@
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Full URL</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Short URL</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Clicks</th>
-                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700 text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,9 +44,11 @@
                                     <%= url.clicks %> Clicks
                                 </span>
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-800">
+                            <td class="px-6 py-4 text-sm text-gray-800 text-center">
                                 <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
                                     onclick="editUrl('<%= url.shortCode %>', '<%= url.fullUrl %>')">Edit</button>
+                                <button class="bg-gray-400 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                                    onclick="seeMore('<%= url.shortCode %>')">See more!</button>
                             </td>
                         </tr>
                         <% }) %>
@@ -80,12 +82,11 @@
             window.shortCodeToUpdate = shortCode;  // Store the shortCode to update
         }
 
-        // Function to close the modal
+        // ฟังก์ชันปิด Modal
         function closeModal() {
             document.getElementById('editModal').classList.add('hidden');
         }
 
-        // Function to update the URL with SweetAlert confirmation
         const updateUrl = () => {
             const newFullUrl = document.getElementById('newUrl').value;
             // console.log(newFullUrl)
@@ -99,7 +100,6 @@
                 return;
             }
 
-            // SweetAlert2 confirmation before updating
             Swal.fire({
                 title: 'Are you sure?',
                 text: "Do you want to update the Full URL?",
@@ -110,7 +110,6 @@
                 confirmButtonText: 'Yes, update it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Send the request to update the URL using Axios
                     axios.put(`/update/${window.shortCodeToUpdate}`, {
                         newFullUrl: newFullUrl
                     })
@@ -118,7 +117,7 @@
                             if (res.data.success === true) {
                                 Swal.fire('Updated!', 'Your URL has been updated.', 'success');
                                 closeModal();
-                                location.reload(); // Reload the page to show updated data
+                                location.reload();
                             }
                         })
                         .catch(e => {
@@ -130,6 +129,21 @@
                 Swal.fire('Error!', 'Something went wrong.', 'error');
             });
         }
+
+        const seeMore = (shortCode) => {
+            axios.get(`/view/${shortCode}`)
+                .then(res => {
+                    if (res) {
+                        window.location.href = `/view/${shortCode}`;
+                    } else {
+                        Swal.fire('Error!', 'Unable to fetch URL details.', 'error');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error:', err);
+                    Swal.fire('Error!', 'Something went wrong.', 'error');
+                });
+        };
     </script>
 
 </body>

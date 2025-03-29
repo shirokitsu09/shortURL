@@ -41,8 +41,8 @@
         </div>
         <div class="mb-4">
             <p class="font-medium text-lg">Short URL:</p>
-            <a href="<%= shortUrl %>" id="shortUrl" class="text-blue-500 break-words">
-                <%= shortUrl %>
+            <a href="<%= shortUrl %>/<%= shortCode %>" id="shortUrl" class="text-blue-500 break-words">
+                <%= shortUrl %>/<%= shortCode %>
             </a>
         </div>
 
@@ -70,6 +70,13 @@
         <div class="mt-4 text-center">
             <a href="/" class="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600">Shorten another URL</a>
         </div>
+        <!-- Link to History Page -->
+    </div>
+    
+    <div class="mt-6 text-center">
+        <p class="text-gray-700 text-lg">Already have a QR Code? <a href="/history"
+                class="text-blue-500 hover:underline">View your history</a></p>
+    </div>
     </div>
 
 </body>

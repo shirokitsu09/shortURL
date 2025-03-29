@@ -5,40 +5,133 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>History and Statistics</title>
-    <link href="/output.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.0.3/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
-<body class="bg-gray-100 text-gray-900">
-    <div class="max-w-4xl mx-auto p-4 bg-white shadow-md rounded">
-        <h1 class="text-xl font-semibold text-center mb-4">History and Statistics</h1>
-        <table class="min-w-full border-collapse">
-            <thead>
-                <tr>
-                    <th class="border p-2">Full URL</th>
-                    <th class="border p-2">Short URL</th>
-                    <th class="border p-2">QR Code</th>
-                    <th class="border p-2">Clicks</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% urls.forEach(url=> { %>
+<body class="bg-gray-100">
+
+    <div class="max-w-6xl mx-auto p-8 bg-white shadow-md rounded-md mt-10">
+        <h1 class="text-2xl font-bold text-center mb-6">URL History and Statistics</h1>
+
+        <div class="overflow-x-auto">
+            <table class="min-w-full table-auto bg-white rounded-md shadow-md">
+                <thead class="bg-gray-200">
                     <tr>
-                        <td class="border p-2"><a href="<%= url.fullUrl %>" class="text-blue-500">
-                                <%= url.fullUrl %>
-                            </a></td>
-                        <td class="border p-2"><a href="<%= url.shortUrl %>" class="text-blue-500">
-                                <%= url.shortUrl %>
-                            </a></td>
-                        <td class="border p-2"><img src="<%= url.qrcode %>" alt="QR Code" class="w-16 h-16 mx-auto">
-                        </td>
-                        <td class="border p-2">
-                            <%= url.clicks %>
-                        </td>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Full URL</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Short URL</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Clicks</th>
+                        <th class="px-6 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
                     </tr>
-                    <% }) %>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <% urls.forEach(url=> { %>
+                        <tr class="border-t">
+                            <td class="px-6 py-4 text-sm text-gray-800 max-w-xs truncate">
+                                <a href="<%= url.fullUrl %>" class="text-blue-500 break-words" target="_blank">
+                                    <%= url.fullUrl %>
+                                </a>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-800 max-w-xs truncate">
+                                <a href="<%= url.shortUrl %>/<%= url.shortCode %>" class="text-blue-500 break-words"
+                                    target="_blank">
+                                    <%= url.shortUrl %>/<%= url.shortCode %>
+                                </a>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-800">
+                                <span class="bg-green-200 text-green-800 py-1 px-3 rounded-md">
+                                    <%= url.clicks %> Clicks
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-800">
+                                <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                                    onclick="editUrl('<%= url.shortCode %>', '<%= url.fullUrl %>')">Edit</button>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="mt-6 text-center">
+            <a href="/" class="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600">Shorten another URL</a>
+        </div>
     </div>
+
+    <!-- Modal for editing URL -->
+    <div id="editModal" class="fixed inset-0 bg-black bg-opacity-50 hidden justify-center items-center">
+        <div class="bg-white p-6 rounded-lg max-w-md mx-auto">
+            <h2 class="text-lg font-semibold mb-4">Edit Directory URL</h2>
+            <input id="newUrl" type="url" class="w-full p-2 border border-gray-300 rounded-md mb-4"
+                placeholder="Enter new Full URL">
+            <button onclick="updateUrl()" class="bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600">Update
+                URL</button>
+            <button onclick="closeModal()"
+                class="bg-gray-500 text-white px-6 py-2 rounded-md hover:bg-gray-600">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the modal with the current Full URL
+        function editUrl(shortCode, currentUrl) {
+            document.getElementById('editModal').classList.remove('hidden');
+            document.getElementById('newUrl').value = currentUrl;
+            window.shortCodeToUpdate = shortCode;  // Store the shortCode to update
+        }
+
+        // Function to close the modal
+        function closeModal() {
+            document.getElementById('editModal').classList.add('hidden');
+        }
+
+        // Function to update the URL with SweetAlert confirmation
+        const updateUrl = () => {
+            const newFullUrl = document.getElementById('newUrl').value;
+            // console.log(newFullUrl)
+
+            if (!newFullUrl) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Please enter a new Full URL!',
+                });
+                return;
+            }
+
+            // SweetAlert2 confirmation before updating
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Do you want to update the Full URL?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, update it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Send the request to update the URL using Axios
+                    axios.put(`/update/${window.shortCodeToUpdate}`, {
+                        newFullUrl: newFullUrl
+                    })
+                        .then(res => {
+                            if (res.data.success === true) {
+                                Swal.fire('Updated!', 'Your URL has been updated.', 'success');
+                                closeModal();
+                                location.reload(); // Reload the page to show updated data
+                            }
+                        })
+                        .catch(e => {
+                            throw err.response.data;
+                        });
+                }
+            }).catch(err => {
+                console.log('Error:', err);
+                Swal.fire('Error!', 'Something went wrong.', 'error');
+            });
+        }
+    </script>
+
 </body>
 
 </html>

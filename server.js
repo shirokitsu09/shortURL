@@ -12,6 +12,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 // ใช้ Body Parser สำหรับดึงข้อมูลจาก form
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 // ใช้ Static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -25,6 +26,7 @@ app.get('/', (req, res) => {
 app.post('/shorten', urlController.shortenUrl);
 app.get('/history', urlController.history);
 app.get('/:shortCode', urlController.redirectToFullUrl);
+app.put('/update/:shortCode', urlController.updateUrl);
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
